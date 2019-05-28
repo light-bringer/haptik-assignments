@@ -1,19 +1,6 @@
 from __future__ import print_function
-import Types
 import Utils
 import config
-
-
-
-
-
-
-
-
-def test_get_names(string):
-    print(get_names_dict(string))
-
-test_get_names(test_str)
 
 
 # print(read_file("C:\\Users\\yodeb\\Desktop\\haptik-assignments\\data\\chats.txt"))
@@ -35,5 +22,29 @@ test_get_names(test_str)
 #         print ("Group {groupNum} found at {start}-{end}: {group}".format(groupNum = groupNum, start = match.start(groupNum), end = match.end(groupNum), group = match.group(groupNum)))
 
 
-def most_active_person():
+def most_active_person(assertvalue=None, test=False):
+    # Question 1
     content = Utils.Utils.read_file(config.CHATFILEPATH)
+    regex = config.REGEX
+    count = config.COUNT
+    
+    names = Utils.Haptik.get_namedict(chat_lines=content, regex=regex)
+    most_active = Utils.Haptik.maxValuefromDict(names=names, ncount=count)
+    print(most_active)
+
+    if test==True and len(assertvalue):
+        try:
+            assert most_active == assertvalue
+        except AssertionError as e:
+            print(e)
+            print("test_failed!")
+
+
+def test():
+    most_active_person()
+
+
+
+
+
+test()
