@@ -49,7 +49,7 @@ class Haptik(object):
         Output      : names -> nameDict -> dict {str, int}
 
         '''
-        names = Types.nameDict
+        names = {}
         matches = re.finditer(regex, chat_lines, re.MULTILINE)
         for matchnum, match in enumerate(matches, start=0):
             name = match.group(1)
