@@ -109,9 +109,11 @@ class Haptik2(object):
         )
     
     @staticmethod
-    def wordBreak(s: str, wordDict:dict)-> bool:
+    def wordBreak(s: str, wordDict:list)-> bool:
         '''
-
+        Description : Takes string and a wordlist to construct the words from the wordlist
+        Input       : s -> str,  wordDict -> [str]
+        Output      : bool
 
         '''
         wordDict = set(wordDict)
@@ -128,3 +130,4 @@ class Haptik2(object):
             return False
         
         return check(s)
+
