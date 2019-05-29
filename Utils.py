@@ -2,6 +2,14 @@ import re
 import operator
 from heapq import nlargest
 import Types
+from itertools import chain
+import collections
+from functools import lru_cache
+
+
+
+
+
 
 
 
@@ -59,3 +67,64 @@ class Haptik(object):
                 names[name] += 1
         
         return names
+    
+
+class Haptik2(object):
+
+    @staticmethod        
+    def validate_all_chars(text, words):
+        all_chars = set(chain.from_iterable(words))
+        return all_chars.issuperset(text)
+    
+    @staticmethod
+    def find_occurrences(pattern: str, text: str):
+        idx = 0
+        while True:
+            idx = text.find(pattern, idx)
+            if idx == -1:
+                return
+            yield idx, idx + len(pattern)
+            idx += 1
+    
+
+    @staticmethod
+    def build_span_graph(text, words):
+        all_spans = collections.defaultdict(set)
+        spans = (Haptik2.find_occurrences(word, text) for word in words)
+        for span in spans:
+            for begin, end in span:
+                all_spans[begin].add(end)
+        return all_spans
+    
+    
+    @staticmethod
+    def find_path(spans, length, begin=0, visited=None):
+        visited = set() if visited is None else visited
+        visited.add(begin)
+        ends = spans[begin]
+        return length in ends or any(
+            Haptik2.find_path(spans, length=length, begin=new_begin, visited=visited)
+            for new_begin in ends
+            if new_begin not in visited and new_begin in spans
+        )
+    
+    @staticmethod
+    def wordBreak(s: str, wordDict:dict)-> bool:
+        '''
+
+
+        '''
+        wordDict = set(wordDict)
+        if not s or not wordDict:
+            return False
+        
+        @lru_cache(None)
+        def check(s):
+            if s in wordDict:
+                return True
+            for i, _ in enumerate(s[1:], 1):
+                if s[:i] in wordDict and check(s[i:]):
+                    return True
+            return False
+        
+        return check(s)
